@@ -15,7 +15,7 @@ class StoreTaskRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             "success" => false,
-            "data" => [ "message" => $validator->errors()->first()]
+            "data" => ["message" => $validator->errors()->first()]
         ], 202));
     }
 
@@ -41,8 +41,8 @@ class StoreTaskRequest extends FormRequest
             'description' => 'nullable|string',
             'start_date' => 'required|date',
             'due_date' => 'required|date|after_or_equal:start_date',
-            'status' =>  Rule::in(['New', 'Incomplete', 'Complete']),
-            'priority' =>  Rule::in(['High', 'Medium', 'Low']),
+            'status' => Rule::in(['New', 'Incomplete', 'Complete']),
+            'priority' => Rule::in(['High', 'Medium', 'Low']),
             'notes' => 'nullable|array',
             'notes.*.subject' => 'required|string',
             'notes.*.attachments' => 'nullable|array',

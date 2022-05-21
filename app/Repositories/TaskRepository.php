@@ -12,16 +12,16 @@ class TaskRepository implements TaskRepositoryInterface
     {
         $query = Task::query();
         $query->where('user_id', Auth::user()->id);
-        if(isset($request['status'])){
+        if (isset($request['status'])) {
             $query->where('status', $request['status']);
         }
-        if(isset($request['due_date'])){
+        if (isset($request['due_date'])) {
             $query->where('due_date', $request['due_date']);
         }
-        if(isset($request['priority'])){
+        if (isset($request['priority'])) {
             $query->where('priority', $request['priority']);
         }
-        if(isset($request['notes'])){
+        if (isset($request['notes'])) {
             $query->has('notes');
         }
         return $query->withCount('notes')

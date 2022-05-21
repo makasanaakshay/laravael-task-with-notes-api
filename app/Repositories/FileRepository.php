@@ -13,7 +13,7 @@ class FileRepository
             Storage::makeDirectory($path, 0777, true);
         }
         $uploadedFile = $file->storeAs(
-            'public/'.$path,
+            'public/' . $path,
             $file->hashName(),
             $driver
         );

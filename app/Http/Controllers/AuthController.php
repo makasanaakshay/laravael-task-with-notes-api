@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     use ApiResponseTrait;
-    public function register(Request $request) {
+
+    public function register(Request $request)
+    {
 
         //In Controller Validation Request
         $validation = Validator::make($request->all(), [
@@ -19,7 +21,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|confirmed'
         ]);
-        if($validation->fails()) {
+        if ($validation->fails()) {
             return $this->sendResponse([
                 "message" => $validation->errors()->first(),
             ], false);
@@ -42,7 +44,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
 
         //In Controller Validation Request
         $validation = Validator::make($request->all(), [
@@ -50,7 +53,7 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        if($validation->fails()) {
+        if ($validation->fails()) {
             return $this->sendResponse([
                 "message" => $validation->errors()->first(),
             ], false);
@@ -60,7 +63,7 @@ class AuthController extends Controller
         $user = User::where('email', $request['email'])->first();
 
         // matching password
-        if(!$user || !Hash::check($request['password'], $user->password)) {
+        if (!$user || !Hash::check($request['password'], $user->password)) {
             return response([
                 'message' => 'Bad creds'
             ], 401);

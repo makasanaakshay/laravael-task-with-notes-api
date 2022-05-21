@@ -30,7 +30,7 @@ php artisan migrate:fresh --seed
 ```
 php artisan serve
 ```
-* Import postman API collection using below link.
+* Import postman API collection using this link.
   https://www.getpostman.com/collections/7612c1bda9073f8e71fb
 ## Test Credentials
 

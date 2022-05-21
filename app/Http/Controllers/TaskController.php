@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     use ApiResponseTrait;
+
     private TaskRepositoryInterface $taskRepository;
 
     public function __construct(TaskRepositoryInterface $taskRepository)
@@ -29,7 +30,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $tasks = $this->taskRepository->get($request->all());
-        //send common response
+        //send common response using task collection
         return $this->sendResponse(new TaskCollection($tasks));
     }
 
@@ -41,6 +42,7 @@ class TaskController extends Controller
     public function create(StoreTaskRequest $request, FileRepository $fileRepository)
     {
         $data = $request->all();
+
         //creating array for task create
         $details = [
             'user_id' => Auth::user()->id,
@@ -56,15 +58,19 @@ class TaskController extends Controller
         $task = $this->taskRepository->create($details);
 
         //add notes to tasks
-        foreach($data['notes'] as $i => $noteData){
+        foreach ($data['notes'] as $i => $noteData) {
             $attachments = '';
-            if(isset($noteData['attachments'])) {
+            //check and upload attachments
+            if (isset($noteData['attachments'])) {
                 foreach ($noteData['attachments'] as $j => $attachment) {
                     $uploadedImage = $fileRepository->uploadFile($attachment, 'note');
                     $attachments .= asset($uploadedImage) . ',';
                 }
             }
+            //remove extra coma at last
             $attachments = rtrim($attachments, ',');
+
+            //create note for tasks
             $task->notes()->create([
                 'subject' => $noteData['subject'],
                 'note' => $noteData['note'] ?? '',
@@ -72,7 +78,7 @@ class TaskController extends Controller
             ]);
         }
 
-        //send common response
+        //send common response task resource
         return $this->sendResponse([
             'task' => TaskResource::make($task->fresh())
         ]);
